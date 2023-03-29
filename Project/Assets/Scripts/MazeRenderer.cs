@@ -22,11 +22,21 @@ public class MazeRenderer : MonoBehaviour
     [SerializeField]
     private Transform floorPrefab = null;
 
+    [SerializeField]
+    private Transform ballPrefab = null;
+
+    [SerializeField]
+    private Transform goalPrefab = null;
+
+    private Vector3 bottomLeftCorner;
+    private Vector3 topRightCorner;
+
     // Start is called before the first frame update
     void Start()
     {
         var maze = MazeGenerator.Generate(width, height);
         Draw(maze);
+        SpawnPlayerAndGoal();
     }
 
     private void Draw(WallState[,] maze) 
@@ -79,6 +89,22 @@ public class MazeRenderer : MonoBehaviour
                 }
             }
         }
+    }
+
+    
+    public void SpawnPlayerAndGoal(){
+        //spawn the player
+        var bottomLeftX = -width/2f;
+        var bottomLeftY = -height/2f;
+        bottomLeftCorner = new Vector3(bottomLeftX, 1f, bottomLeftY);
+        var player = Instantiate(ballPrefab, bottomLeftCorner, Quaternion.identity);
+        print("BottomLeftX is:" + bottomLeftX + " bottomLeftY is " + bottomLeftY);
+
+        //spawn the goal
+        topRightCorner = new Vector3(-1*(bottomLeftX)-1f, 1f, -1*(bottomLeftY)-1f);
+        var goal = Instantiate(goalPrefab, topRightCorner, Quaternion.identity);
+
+
     }
 
     // Update is called once per frame
